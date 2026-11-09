@@ -143,7 +143,7 @@ BOOL BMD_FBX::Encrypt()
 		_buf.insert(_buf.begin(), 8, 0);
 		*(size_t*)&_buf[4] = size;
 	}
-	else if (ver = 0xA)
+	else if (ver == 0xA)
 	{
 		_buf.insert(_buf.begin(), 4, 0);
 	}
