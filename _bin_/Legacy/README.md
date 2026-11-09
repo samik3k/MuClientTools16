@@ -2,7 +2,7 @@
 
 The Season 16 tools in this repo expect Season 16 data. Old clients use other table layouts, unencrypted or
 differently encrypted terrain, and a few odd files, so those tools reject them or silently write garbage.
-MuLegacy reads every data file found in the 0.68b, 0.69, 0.75, 0.85, 0.97, 0.99, 1.00 – 1.04 and GMO 1.03.16 clients.
+MuLegacy reads every data file found in the 0.68b, 0.69, 0.75, 0.85, 0.93d, 0.97, 0.99, 1.00 – 1.04 and GMO 1.03.16 clients.
 
 ## Usage
 
@@ -36,7 +36,7 @@ Other files (`.wav`, `.mp3`, `.txt`, `.dll`, …) are left alone and counted in 
 
 | Table | Layouts (file size → versions) |
 |---|---|
-| Item.bmd | 14080/28160 (0.68–0.85, 55 B), 32772 (0.97, 64 B), 38916 (0.99–1.01.02, 76 B), 655364 (1.01.46, 80 B), 688132 (1.02.44–1.04.10 five classes, 1.03.16/1.04.24 six classes — told apart by content), 69636 (DaRKav 0.97.14) |
+| Item.bmd | 14080/28160 (0.68–0.85, 55 B), 28672 (0.93d CHS, 56 B), 32772 (0.97, 64 B), 38916 (0.99–1.01.02, 76 B), 655364 (1.01.46, 80 B), 688132 (1.02.44–1.04.10 five classes, 1.03.16/1.04.24 six classes — told apart by content), 69636 (DaRKav 0.97.14) |
 | Skill.bmd | 2304 (0.68/0.75), 2432 (0.85), 2564 (0.97), 13316 (0.99), 15364 (1.00–1.04.10), 40804 (1.04.24), 48004 (1.03.16), 2692 (DaRKav) |
 | Text.bmd | fixed 300-byte entries (180000 … 900000, 0.68–1.02.44); "GT" indexed format (1.03.16, 1.03.47, 1.04.x) |
 | Gate.bmd, MoveReq.bmd | all versions (Gate 9- and 12-byte records; MoveReq keeps the unused slots) |

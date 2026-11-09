@@ -197,6 +197,31 @@ field Resist u8*4          # 60 ice poison lightning fire
 
 # Layout proven by the 0.85 main: item.txt parser at 0x4552xx, bmd loader sub_455E00 (55-byte records), item builder
 # reading +30 +31 +34..+40 +42 +43 +44 +45.
+# 0.93.04 (0.93d) CHS: 512 x 56, no CRC. Same as the 55-byte record with one byte inserted after Durability
+# (always 0 on weapons; MagicDurability in the 0.97 64-byte layout); everything after it moves by one.
+variant s0_56 =28672 rec=56 xor=record label="0.93.04 CHS (512 x 56, GBK names)"
+field Name str30
+field TwoHand u8           # 30
+field Level u8             # 31
+field Width u8             # 32
+field Height u8            # 33
+field DamageMin u8         # 34
+field DamageMax u8         # 35
+field SuccessfulBlocking u8  # 36
+field Defense u8           # 37
+field MagicDefense u8      # 38
+field AttackSpeed u8       # 39
+field WalkSpeed u8         # 40
+field Durability u8        # 41
+field MagicDurability u8   # 42 (new in this layout)
+field ReqStrength u8       # 43 (old formula value, as in the 55-byte record)
+field ReqDexterity u8      # 44
+field ReqEnergy u8         # 45
+field ReqLevel u8          # 46
+field Value u8             # 47
+field Class u8*4           # 48 DW DK FE MG
+field Resist u8*4          # 52 ice poison lightning fire
+
 variant s0_55 =14080,28160 rec=55 xor=record label="0.68.02, 0.75.00 (256 x 55, KOR/ENG names); 0.85.00 (512 x 55, GBK names)"
 field Name str30
 field TwoHand u8           # 30
