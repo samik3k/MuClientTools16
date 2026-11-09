@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Legacy">
+      <UniqueIdentifier>{4F6B2C1E-8D3A-4E5B-9C7D-1A2B3C4D5E6F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="..\..\..\Legacy\LegacyCommon.cpp">
+      <Filter>Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Legacy\LegacyGraphic.cpp">
+      <Filter>Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Legacy\LegacySchema.cpp">
+      <Filter>Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Legacy\LegacyTerrain.cpp">
+      <Filter>Legacy</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Legacy\LegacyCommon.h">
+      <Filter>Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Legacy\LegacyGraphic.h">
+      <Filter>Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Legacy\LegacySchema.h">
+      <Filter>Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Legacy\LegacyTerrain.h">
+      <Filter>Legacy</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

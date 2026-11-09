@@ -8,6 +8,13 @@ If you want to ask or look for help, please don't open issues here. It will not 
 Please post it on ragezone or my original thread instead.  
 https://forum.ragezone.com/f197/release-muclienttools-season-16-1-a-1198961/  
   
+### Old clients (0.68 - 1.04, Season 0 - 4)
+
+`MuLegacy` reads the data of old clients that the Season 16 tools reject: Item/Skill/Text/Gate/Quest/... tables in
+every old layout (unpack to text and pack back byte-identical), OZ* images including their odd variants, BMD v0x0A /
+v0x0C models, old and encrypted terrain files and the Enc1/Dec2 key files. Layouts are kept in an editable schema.
+See [`_bin_/Legacy/README.md`](_bin_/Legacy/README.md).
+
 ### LASTEST UPDATE: JULY 2022
   
 Add Bmd2Fbx tool  

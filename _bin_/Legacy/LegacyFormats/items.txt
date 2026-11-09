@@ -1,0 +1,339 @@
+# items group: Item, ItemSetType, ItemSetOption, ItemAddOption, JewelOfHarmonyOption, JewelOfHarmonySmelt, SocketItem
+# Evidence for every field: notes/items.md
+# Offsets in comments are absolute byte offsets inside the record (after XOR).
+
+table Item item.bmd
+# Item index = record number. 0.68-0.75: 16 groups x 16, 0.85-1.01.02: 16 x 32, DaRKav: 16 x 64, 1.01.46+: 16 x 512.
+#
+# 84-byte record, SIX class flags (DW DK FE MG DL SU). 1.04.24 and GMO 1.03.16 (class loop of 6 at +0x45 and
+# resistance loop at +0x4B in both mains). SAME SIZE AND CRC KEY as variant cls5_84 below;
+# probe= checks record 2581 (Book of Sahamutt) byte 74, which is 1 only in 6-class files.
+variant cls6_84 =688132 rec=84 crc=E2F1 xor=record probe=2581:74:1 label="1.04.24, 1.03.16 (GMO) - 8192 x 84, 6 classes (see notes for 5-class twin)"
+field Name str30
+field TwoHand u8           # 30
+pad 1                      # 31 always 0
+field Level u16            # 32 drop/item level (Bone Blade 147, Kris 6)
+field Slot u8              # 34 equip slot: 0 RH 1 LH 2 helm 3 armor 4 pants 5 gloves 6 boots 7 wings 8 helper 9 amulet 10 ring, 255 none
+field Skill u8             # 35 skill granted (sword 19-23, Force 66 on scepters, 223-225 on summoner books, 49 Dinorant)
+field Width u8             # 36
+field Height u8            # 37
+field DamageMin u8         # 38
+field DamageMax u8         # 39
+field SuccessfulBlocking u8  # 40 (shields; also set on gloves/boots)
+field Defense u8           # 41
+field MagicDefense u8      # 42
+field AttackSpeed u8       # 43 Kris 50
+field WalkSpeed u8         # 44 boots
+field Durability u8        # 45
+field MagicDurability u8   # 46 staffs
+field MagicPower u8        # 47 staff/scepter/MG-sword wizardry %
+field ReqStrength u16      # 48
+field ReqDexterity u16     # 50
+field ReqEnergy u16        # 52
+field Unk54 u16            # 54 always 0 (slot between energy and command, see notes)
+field ReqCommand u16       # 56 DL scrolls (Summon 400)
+field ReqLevel u16         # 58 Bone Blade 380, wings 180/215
+field Value u8             # 60 potions/jewels (small potion 10)
+pad 3                      # 61 always 0
+field Zen u32              # 64 fixed NPC price (Twisting Slash orb 29000, Seed 500000)
+field SetAttr u8           # 68 ancient stat bonus kind: 1 str, 2 agi, 3 ene, 4 vit (swords 1, bows 2, staffs 3, armor 4)
+field Class u8*6           # 69 DW DK FE MG DL SU; 0 no, 1 base class, 2 second class, 3 third
+field Resist u8*7          # 75 ice poison lightning fire earth wind water
+pad 2                      # 82 always 0
+
+# 84-byte record, FIVE class flags (DW DK FE MG DL). 1.02.44, 1.03.47, 1.04.10 (class loop of 5 at +0x45,
+# resistance loop at +0x4A in 1.04.10 main). Chosen when the probe of cls6_84 fails.
+variant cls5_84 =688132 rec=84 crc=E2F1 xor=record label="1.02.44, 1.03.47, 1.04.10 - 8192 x 84, 5 classes"
+field Name str30
+field TwoHand u8
+pad 1
+field Level u16
+field Slot u8
+field Skill u8
+field Width u8
+field Height u8
+field DamageMin u8
+field DamageMax u8
+field SuccessfulBlocking u8
+field Defense u8
+field MagicDefense u8
+field AttackSpeed u8
+field WalkSpeed u8
+field Durability u8
+field MagicDurability u8
+field MagicPower u8
+field ReqStrength u16
+field ReqDexterity u16
+field ReqEnergy u16
+field Unk54 u16
+field ReqCommand u16
+field ReqLevel u16
+field Value u8
+pad 3
+field Zen u32
+field SetAttr u8           # 68
+field Class u8*5           # 69 DW DK FE MG DL
+field Resist u8*7          # 74 ice poison lightning fire earth wind water
+field Unk81 u8             # 81 0 except 255 on "Ring of GM" (all resist bytes 255 there too)
+pad 2
+
+variant s1_80 =655364 rec=80 crc=E2F1 xor=record label="1.01.46 - 8192 x 80"
+field Name str30
+field TwoHand u8           # 30
+field Level u8             # 31
+field Slot u8              # 32
+field Skill u8             # 33
+field Width u8             # 34
+field Height u8            # 35
+field DamageMin u8         # 36
+field DamageMax u8         # 37
+field SuccessfulBlocking u8  # 38
+field Defense u8           # 39
+field MagicDefense u8      # 40
+field AttackSpeed u8       # 41
+field WalkSpeed u8         # 42
+field Durability u8        # 43
+field MagicDurability u8   # 44
+field MagicPower u8        # 45
+field ReqStrength u16      # 46
+field ReqDexterity u16     # 48
+field ReqEnergy u16        # 50
+field Unk52 u16            # 52 always 0
+field ReqCommand u16       # 54
+field ReqLevel u16         # 56 (Bone Blade etc. 65535 = not obtainable)
+field Value u8             # 58
+pad 1                      # 59 always 0
+field Zen u32              # 60
+field SetAttr u8           # 64
+field Class u8*5           # 65 DW DK FE MG DL
+field Resist u8*7          # 70
+pad 3                      # 77 always 0
+
+# Layout proven by the 1.00.13 CHS main: loader sub_52C7C0 (fread 0x9800 = 512 x 76, CRC 0xE2F1), item builder at
+# 0x52xxxx reads +30 +31 +36..+42 +45 +46 +48 +50 +52 +54, tooltip sub_40C0E0 reads +60.
+variant s1_76 =38916 rec=76 crc=E2F1 xor=record label="0.99.28, 1.00.15, 1.01.02 - 512 x 76"
+field Name str30
+field TwoHand u8           # 30
+field Level u8             # 31
+field Slot u8              # 32
+field Skill u8             # 33
+field Width u8             # 34
+field Height u8            # 35
+field DamageMin u8         # 36
+field DamageMax u8         # 37
+field SuccessfulBlocking u8  # 38
+field Defense u8           # 39
+field MagicDefense u8      # 40
+field AttackSpeed u8       # 41 (client keeps a 2x copy as anti-hack check)
+field WalkSpeed u8         # 42
+field Durability u8        # 43
+field MagicDurability u8   # 44
+field MagicPower u8        # 45
+field ReqStrength u16      # 46
+field ReqDexterity u16     # 48
+field ReqEnergy u16        # 50
+field ReqCommand u16       # 52 (Dark Horse: 185 + 15*level in code)
+field ReqLevel u8          # 54 (+4 per item level, +5 for 2nd wings)
+field Value u8             # 55
+field Zen u32              # 56
+field SetAttr u8           # 60
+field Class u8*5           # 61 DW DK FE MG DL
+field Resist u8*7          # 66
+pad 3                      # 73 always 0
+
+# 0.97.14-darkav (private-server mix): 1024 x 68 followed by 4 extra bytes that are XOR'd zeros (key restarted), no CRC
+# with any wkey; the trailer is kept as is.
+variant darkav_68 =69636 rec=68 crc=E2F1 crccheck=no xor=record label="0.97.14-darkav - 1024 x 68 (16 x 64) + 4-byte trailer"
+field Name str30
+field TwoHand u8
+field Level u8
+field Width u8
+field Height u8
+field DamageMin u8
+field DamageMax u8
+field SuccessfulBlocking u8
+field Defense u8
+field MagicDefense u8
+field AttackSpeed u8
+field WalkSpeed u8
+field Durability u8
+field MagicDurability u8
+field MagicPower u8
+field ReqStrength u16
+field ReqDexterity u16
+field ReqEnergy u16
+field ReqLevel u8
+field Value u8
+field Zen u32
+field SetAttr u8
+field Class u8*4
+field Resist u8*7
+
+variant s0_64 =32772 rec=64 crc=E2F1 xor=record label="0.97.04 - 512 x 64 (no SetAttr, 4 classes, 4 resists)"
+field Name str30
+field TwoHand u8           # 30
+field Level u8             # 31
+field Width u8             # 32
+field Height u8            # 33
+field DamageMin u8         # 34
+field DamageMax u8         # 35
+field SuccessfulBlocking u8  # 36
+field Defense u8           # 37
+field MagicDefense u8      # 38
+field AttackSpeed u8       # 39
+field WalkSpeed u8         # 40
+field Durability u8        # 41
+field MagicDurability u8   # 42
+field MagicPower u8        # 43
+field ReqStrength u16      # 44
+field ReqDexterity u16     # 46
+field ReqEnergy u8         # 48 (u8 here; u16 in DaRKav/0.99+)
+field ReqLevel u8          # 49 wings 180/215
+field Unk50 u8             # 50 always 0
+field Value u8             # 51
+field Zen u32              # 52
+field Class u8*4           # 56 DW DK FE MG
+field Resist u8*4          # 60 ice poison lightning fire
+
+# Layout proven by the 0.85 main: item.txt parser at 0x4552xx, bmd loader sub_455E00 (55-byte records), item builder
+# reading +30 +31 +34..+40 +42 +43 +44 +45.
+variant s0_55 =14080,28160 rec=55 xor=record label="0.68.02, 0.75.00 (256 x 55, KOR/ENG names); 0.85.00 (512 x 55, GBK names)"
+field Name str30
+field TwoHand u8           # 30
+field Level u8             # 31
+field Width u8             # 32
+field Height u8            # 33
+field DamageMin u8         # 34
+field DamageMax u8         # 35
+field SuccessfulBlocking u8  # 36
+field Defense u8           # 37
+field MagicDefense u8      # 38
+field AttackSpeed u8       # 39
+field WalkSpeed u8         # 40
+field Durability u8        # 41
+field ReqStrength u8       # 42 (old formula: 3*x*(lvl+...)/10+20)
+field ReqDexterity u8      # 43
+field ReqEnergy u8         # 44
+field ReqLevel u8          # 45
+field Value u8             # 46
+field Class u8*4           # 47 DW DK FE MG
+field Resist u8*4          # 51 ice poison lightning fire
+
+
+table ItemTest itemtest.bmd
+# Data/Item/Itemtest.bmd: 256 x 45, Korean names, file date 2001-07-21 - older than every client here and carried
+# unchanged up to 1.04 (no main loads it). The 15 bytes after the name are byte-identical to the last 15 bytes
+# (offsets 40..54) of the 0.75 55-byte Item.bmd record, so the names below follow that layout.
+variant t45 =11520 rec=45 xor=record label="pre-0.68 test table found in 0.75 - 1.04.24 clients (256 x 45)"
+field Name str30
+field WalkSpeed u8
+field Durability u8
+field ReqStrength u8
+field ReqDexterity u8
+field ReqEnergy u8
+field ReqLevel u8
+field Value u8
+field Class u8*4
+field Resist u8*4
+
+table ItemSetType itemsettype.bmd
+# One record per item index. SetIndex[t-1] = ItemSetOption record for ancient option t (1 or 2).
+# Empty = 255 (0.97.14-1.01.46, 1.04.10) or 0 (1.02.44, 1.03.x, 1.04.24).
+variant s2_8192 =32772 rec=4 crc=E5F1 xor=record label="1.01.46 - 1.04.24 (8192 x 4)"
+field SetIndex u8*2
+field Unk2 u8*2            # always 0 (or 255 on empty records)
+variant s1_512 =2052 rec=4 crc=E5F1 xor=record label="0.97.14-darkav, 0.99.28, 1.00.15, 1.01.02 (512 x 4)"
+field SetIndex u8*2
+field Unk2 u8*2
+
+
+table ItemSetOption itemsetoption.bmd
+# 64 ancient sets; record index = value stored in ItemSetType.SetIndex. Option ids index the set-option text table;
+# 255 = unused. TierOption/TierValue are 6 pairs: [2*k] and [2*k+1] are the two options unlocked by tier k.
+variant cls6 =6980 rec=109 crc=A2F1 xor=record label="1.03.16 (GMO), 1.04.24 (64 x 109, 6 classes)"
+field Name str64
+field TierOption u8*12     # 64
+field TierValue u8*12      # 76
+field ExtraOption u8*2     # 88
+field ExtraValue u8*2      # 90
+field Unk92 u8             # 92 255 = unused record; otherwise = (ItemSetType references to this set) + 1
+field FullOption u8*5      # 93 shown as active only when the whole set is worn
+field FullValue u8*5       # 98
+field Class u8*6           # 103 width follows the client's class count (see notes)
+variant cls5 =6916 rec=108 crc=A2F1 xor=record label="1.02.44, 1.03.47, 1.04.10 (64 x 108, 5 classes)"
+field Name str64
+field TierOption u8*12
+field TierValue u8*12
+field ExtraOption u8*2
+field ExtraValue u8*2
+field Unk92 u8
+field FullOption u8*5
+field FullValue u8*5
+field Class u8*5
+# Proven by the 1.00.13 CHS main: loader sub_40AD30 (fread 0x1300 = 64 x 76, CRC 0xA2F1), tooltip sub_40D310/sub_40D0D0.
+variant s1 =4868 rec=76 crc=A2F1 xor=record label="0.97.14-darkav, 0.99.28, 1.00.15, 1.01.02, 1.01.46 (64 x 76)"
+field Name str32
+field TierOption u8*12     # 32
+field TierValue u8*12      # 44
+field ExtraOption u8*2     # 56
+field ExtraValue u8*2      # 58
+field Unk60 u8             # 60 client: record valid only if < 255
+field FullOption u8*5      # 61
+field FullValue u8*5       # 66
+field Class u8*5           # 71
+
+
+table ItemAddOption itemaddoption.bmd
+# One record per item index (8192), whole file XOR'd as one stream, no CRC. Used by 380-level items, pets, seals,
+# scrolls. ItemIndex always == record number % 512.
+variant s3_16 =131072 rec=16 xor=stream label="1.03.16 (GMO), 1.04.24 (8192 x 16)"
+field Option1 u16
+field Value1 u16
+field Option2 u16
+field Value2 u16
+field ItemIndex u16        # 8
+field Unk10 u16            # 10 always 0
+field Time u32             # 12 buff duration in seconds (1200/1800/3600, Leap of * 864000 = 10 days)
+variant s3_12 =98304 rec=12 xor=stream label="1.04.10 (8192 x 12)"
+field Option1 u16
+field Value1 u16
+field Option2 u16
+field Value2 u16
+field ItemIndex u16
+field Time u16             # 10 1800 on the Jack O'Lantern scrolls (30-minute buffs)
+variant s2_10 =81920 rec=10 xor=stream label="1.02.44, 1.03.47 (8192 x 10)"
+field Option1 u16
+field Value1 u16
+field Option2 u16
+field Value2 u16
+field ItemIndex u16
+
+
+table JewelOfHarmonyOption jewelofharmonyoption.bmd
+# 30 records = 3 item kinds x 10 options: 0-9 weapons, 10-19 staffs, 20-29 armour; Index -1 = unused slot.
+variant s2 =5400 rec=180 xor=record label="1.02.44 - 1.04.24 (30 x 180, no CRC)"
+field Index u32
+field Name str60
+field MinLevel u32         # 64 first item level (+0..+13) the option is available at
+field Value u32*14         # 68 option value per item level 0..13 (0 below MinLevel)
+field Zen u32*14           # 124 per item level (0 below MinLevel)
+
+
+table JewelOfHarmonySmelt jewelofharmonysmelt.bmd
+# One record per item index (8192), whole file XOR'd as one stream, no CRC. Lists items that can be smelted.
+variant s2 =557056 rec=68 xor=stream label="1.02.44 - 1.04.24 (8192 x 68); names cp932 in 1.03.16 GMO"
+field ItemId u32           # group*512 + index (== record number) on used records
+field Name str60
+field Unk64 u32            # 4 on every used record
+
+
+table SocketItem socketitem.bmd
+# 150 records = 3 tables of 50: 0-49 seed-sphere options, 50-99 bonus-socket options, 100-149 socket set options.
+variant s4 =15600 rec=104 xor=record label="1.03.16 (GMO) only (150 x 104, no CRC)"
+field Index u32            # index inside its 50-record table
+field Element u32          # 1 fire 2 water 3 ice 4 wind 5 lightning 6 earth (0 in bonus/set tables)
+field Name str64
+field ValueType u32        # 72 1 flat, 2 percent, 3 per character level, 4/5 on monster kill
+field Value u32            # 76
+field Unk80 u32*4          # 80
+field Unk96 u8*8           # 96 only set on set-option records 100/101

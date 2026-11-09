@@ -1,0 +1,55 @@
+# group "world": Gate.bmd, MoveReq.bmd (Enc1.dat / Dec2.dat and terrain files are read by built-in code)
+# Evidence and the terrain / key-file formats: notes/world.md
+
+# ---------------------------------------------------------------------------------------------
+# Gate.bmd - warp gates / town spawn areas. Fixed array, no count, no CRC, FC CF AB per record.
+# Flag: 0 = spawn/landing area (target of /move, death respawn), 1 = entrance (walk-in trigger),
+#       2 = exit (destination of an entrance).  Client (0.85 sub_454F00 + gate trigger code):
+#       if Flag==1 && Map==current && X1<=x<=X2 && Y1<=y<=Y2 -> warp, Level checked (2/3 for MG).
+table Gate gate.bmd
+variant g512x12 =6144 rec=12 xor=record label="1.03.16 GMO, 1.04.24 (512 gates)"
+field Flag u8
+field Map u8
+field X1 u8
+field Y1 u8
+field X2 u8
+field Y2 u8
+field Target u16
+field Dir u16
+field Level u16
+variant g256x9 =2304 rec=9 xor=record label="1.00.15, 1.01.02, 1.01.46, 1.02.44, 1.03.47, 1.04.10 (256 gates; 1.00.13 CHS loader sub_52B250 reads 9 B until 2304)"
+field Flag u8
+field Map u8
+field X1 u8
+field Y1 u8
+field X2 u8
+field Y2 u8
+field Target u8
+field Dir u8
+field Level u8
+variant g100x9 =900 rec=9 xor=record label="0.75, 0.85, 0.97.04, 0.97.14-darkav, 0.99.28 (100 gates; 0.85 loader sub_454F00 reads 9 B until 900)"
+field Flag u8
+field Map u8
+field X1 u8
+field Y1 u8
+field X2 u8
+field Y2 u8
+field Target u8
+field Dir u8
+field Level u8
+
+# ---------------------------------------------------------------------------------------------
+# MoveReq.bmd - the /move list (0.75: Data/movereq.bmd, later Data/Local/MoveReq.bmd).
+# Real layout: u32 Count (plain), then Count records of 80 B, FC CF AB per record:
+#   u32 Index, str32 Name1 (Latin keyword), str32 Name2 (localized in CHS), i32 Level, i32 Zen, i32 Gate
+# Files are written from a fixed-capacity buffer (36 or 80 slots) and the client
+# (1.00.13 sub_4380C0: fread 4 -> count, then count x fread 80) ignores everything after Count
+# records; header=count32cap keeps those unused slots as is.
+table MoveReq movereq.bmd
+variant v80 * rec=80 header=count32cap xor=record label="0.75 - 1.04.24 (u32 count + 80-byte records; 36 slots, 80 in 1.03.16, exact in 1.04.24)"
+field Index u32
+field Name1 str32
+field Name2 str32
+field Level i32
+field Zen i32
+field Gate i32

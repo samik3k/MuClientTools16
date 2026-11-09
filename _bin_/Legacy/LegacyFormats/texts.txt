@@ -1,0 +1,960 @@
+# texts group: Text, Filter, FilterName, Dialog, Quest, Slide, Credit, ServerInfo, ShopCategoryItems, ShopUI
+# (DaRKav Data/Local/Monster50.bmd is a misplaced BMD model; it is read as a model, not as a table)
+# Evidence: notes/texts.md
+
+table Text text.bmd,text(*).bmd
+# GT format (1.03.16/1.03.47/1.04.x): "GT" magic + u32 count + (u32 index, u32 len, len bytes xor per entry), no NUL, no CRC.
+variant gt * layout=text-indexed magic=GT xor=record label="1.03.16, 1.03.47, 1.04.10, 1.04.24 (GT indexed; 3000 / 2574 entries)"
+variant fixed900000 =900000 rec=300 xor=record label="1.02.44 (3000 x 300)"
+field Text str300
+variant fixed614400 =614400 rec=300 xor=record label="1.00.15, 1.01.02, 1.01.46 (2048 x 300)"
+field Text str300
+variant fixed450000 =450000 rec=300 xor=record label="0.99.28 (1500 x 300)"
+field Text str300
+variant fixed360000 =360000 rec=300 xor=record label="0.97.14-darkav Text/Text(ENG)/Text(CHS) (1200 x 300)"
+field Text str300
+variant fixed300000 =300000 rec=300 xor=record label="0.97.04 (1000 x 300)"
+field Text str300
+variant fixed240000 =240000 rec=300 xor=record label="0.85.00 (800 x 300)"
+field Text str300
+variant fixed180000 =180000 rec=300 xor=record label="0.68.02, 0.69.00, 0.75.00 (600 x 300)"
+field Text str300
+
+table Filter filter.bmd
+variant crc =20004 rec=20 crc=3E7D xor=record label="0.97.04 - 1.04.24 (1000 x 20 + CRC)"
+field Word str20
+variant big =20000 rec=20 xor=record label="0.85.00 (1000 x 20, no CRC)"
+field Word str20
+variant small =2000 rec=20 xor=record label="0.75.00 (100 x 20, no CRC)"
+field Word str20
+
+table FilterName filtername.bmd
+variant crc1000 =20004 rec=20 crc=2BC1 xor=record label="0.97.04 - 1.01.46 (1000 x 20 + CRC)"
+field Name str20
+variant crc500 =10004 rec=20 crc=2BC1 xor=record label="1.02.44 - 1.04.24 (500 x 20 + CRC)"
+field Name str20
+variant small =2000 rec=20 xor=record label="0.85.00 (100 x 20, no CRC)"
+field Name str20
+# 0.97.14-darkav: 1000 x 20 + a trailing u32 that is NOT a valid CRC (hand-edited file); the trailer is kept as is.
+variant badcrc =20004 rec=20 crc=2BC1 crccheck=no xor=record label="0.97.14-darkav (1000 x 20, CRC mismatch: edited file)"
+field Name str20
+
+table Dialog dialog.bmd
+variant v1 =204800 rec=1024 xor=record label="0.97.04 - 1.04.24 (200 x 1024)"
+field Text str300
+field AnswerCount i32
+field AnswerLink i32*10
+field AnswerAction i32*10
+field Answer str64*10
+
+table Quest quest.bmd
+variant q712 =142400 rec=712 xor=record label="1.03.16, 1.04.10, 1.04.24 (200 x 712; 6 classes)"
+field ActCount i16
+field RequestCount i16
+field NpcType u16
+field Name str32
+field A00_Unk0 u8
+field A00_Type u8
+field A00_ItemTypeOrMonster u16
+field A00_ItemIndex u8
+field A00_ItemLevel u8
+field A00_ItemNum u8
+field A00_RequestType u8
+field A00_Class u8*6
+field A00_DialogIndex i16*4
+field A01_Unk0 u8
+field A01_Type u8
+field A01_ItemTypeOrMonster u16
+field A01_ItemIndex u8
+field A01_ItemLevel u8
+field A01_ItemNum u8
+field A01_RequestType u8
+field A01_Class u8*6
+field A01_DialogIndex i16*4
+field A02_Unk0 u8
+field A02_Type u8
+field A02_ItemTypeOrMonster u16
+field A02_ItemIndex u8
+field A02_ItemLevel u8
+field A02_ItemNum u8
+field A02_RequestType u8
+field A02_Class u8*6
+field A02_DialogIndex i16*4
+field A03_Unk0 u8
+field A03_Type u8
+field A03_ItemTypeOrMonster u16
+field A03_ItemIndex u8
+field A03_ItemLevel u8
+field A03_ItemNum u8
+field A03_RequestType u8
+field A03_Class u8*6
+field A03_DialogIndex i16*4
+field A04_Unk0 u8
+field A04_Type u8
+field A04_ItemTypeOrMonster u16
+field A04_ItemIndex u8
+field A04_ItemLevel u8
+field A04_ItemNum u8
+field A04_RequestType u8
+field A04_Class u8*6
+field A04_DialogIndex i16*4
+field A05_Unk0 u8
+field A05_Type u8
+field A05_ItemTypeOrMonster u16
+field A05_ItemIndex u8
+field A05_ItemLevel u8
+field A05_ItemNum u8
+field A05_RequestType u8
+field A05_Class u8*6
+field A05_DialogIndex i16*4
+field A06_Unk0 u8
+field A06_Type u8
+field A06_ItemTypeOrMonster u16
+field A06_ItemIndex u8
+field A06_ItemLevel u8
+field A06_ItemNum u8
+field A06_RequestType u8
+field A06_Class u8*6
+field A06_DialogIndex i16*4
+field A07_Unk0 u8
+field A07_Type u8
+field A07_ItemTypeOrMonster u16
+field A07_ItemIndex u8
+field A07_ItemLevel u8
+field A07_ItemNum u8
+field A07_RequestType u8
+field A07_Class u8*6
+field A07_DialogIndex i16*4
+field A08_Unk0 u8
+field A08_Type u8
+field A08_ItemTypeOrMonster u16
+field A08_ItemIndex u8
+field A08_ItemLevel u8
+field A08_ItemNum u8
+field A08_RequestType u8
+field A08_Class u8*6
+field A08_DialogIndex i16*4
+field A09_Unk0 u8
+field A09_Type u8
+field A09_ItemTypeOrMonster u16
+field A09_ItemIndex u8
+field A09_ItemLevel u8
+field A09_ItemNum u8
+field A09_RequestType u8
+field A09_Class u8*6
+field A09_DialogIndex i16*4
+field A10_Unk0 u8
+field A10_Type u8
+field A10_ItemTypeOrMonster u16
+field A10_ItemIndex u8
+field A10_ItemLevel u8
+field A10_ItemNum u8
+field A10_RequestType u8
+field A10_Class u8*6
+field A10_DialogIndex i16*4
+field A11_Unk0 u8
+field A11_Type u8
+field A11_ItemTypeOrMonster u16
+field A11_ItemIndex u8
+field A11_ItemLevel u8
+field A11_ItemNum u8
+field A11_RequestType u8
+field A11_Class u8*6
+field A11_DialogIndex i16*4
+field A12_Unk0 u8
+field A12_Type u8
+field A12_ItemTypeOrMonster u16
+field A12_ItemIndex u8
+field A12_ItemLevel u8
+field A12_ItemNum u8
+field A12_RequestType u8
+field A12_Class u8*6
+field A12_DialogIndex i16*4
+field A13_Unk0 u8
+field A13_Type u8
+field A13_ItemTypeOrMonster u16
+field A13_ItemIndex u8
+field A13_ItemLevel u8
+field A13_ItemNum u8
+field A13_RequestType u8
+field A13_Class u8*6
+field A13_DialogIndex i16*4
+field A14_Unk0 u8
+field A14_Type u8
+field A14_ItemTypeOrMonster u16
+field A14_ItemIndex u8
+field A14_ItemLevel u8
+field A14_ItemNum u8
+field A14_RequestType u8
+field A14_Class u8*6
+field A14_DialogIndex i16*4
+field A15_Unk0 u8
+field A15_Type u8
+field A15_ItemTypeOrMonster u16
+field A15_ItemIndex u8
+field A15_ItemLevel u8
+field A15_ItemNum u8
+field A15_RequestType u8
+field A15_Class u8*6
+field A15_DialogIndex i16*4
+pad 2
+field R00_Unk0 u8
+field R00_Type u8
+field R00_CompleteQuest i16
+field R00_LevelMin u16
+field R00_LevelMax u16
+field R00_Unk8 u32
+field R00_Zen u32
+field R00_ErrorDialog i16
+pad 2
+field R01_Unk0 u8
+field R01_Type u8
+field R01_CompleteQuest i16
+field R01_LevelMin u16
+field R01_LevelMax u16
+field R01_Unk8 u32
+field R01_Zen u32
+field R01_ErrorDialog i16
+pad 2
+field R02_Unk0 u8
+field R02_Type u8
+field R02_CompleteQuest i16
+field R02_LevelMin u16
+field R02_LevelMax u16
+field R02_Unk8 u32
+field R02_Zen u32
+field R02_ErrorDialog i16
+pad 2
+field R03_Unk0 u8
+field R03_Type u8
+field R03_CompleteQuest i16
+field R03_LevelMin u16
+field R03_LevelMax u16
+field R03_Unk8 u32
+field R03_Zen u32
+field R03_ErrorDialog i16
+pad 2
+field R04_Unk0 u8
+field R04_Type u8
+field R04_CompleteQuest i16
+field R04_LevelMin u16
+field R04_LevelMax u16
+field R04_Unk8 u32
+field R04_Zen u32
+field R04_ErrorDialog i16
+pad 2
+field R05_Unk0 u8
+field R05_Type u8
+field R05_CompleteQuest i16
+field R05_LevelMin u16
+field R05_LevelMax u16
+field R05_Unk8 u32
+field R05_Zen u32
+field R05_ErrorDialog i16
+pad 2
+field R06_Unk0 u8
+field R06_Type u8
+field R06_CompleteQuest i16
+field R06_LevelMin u16
+field R06_LevelMax u16
+field R06_Unk8 u32
+field R06_Zen u32
+field R06_ErrorDialog i16
+pad 2
+field R07_Unk0 u8
+field R07_Type u8
+field R07_CompleteQuest i16
+field R07_LevelMin u16
+field R07_LevelMax u16
+field R07_Unk8 u32
+field R07_Zen u32
+field R07_ErrorDialog i16
+pad 2
+field R08_Unk0 u8
+field R08_Type u8
+field R08_CompleteQuest i16
+field R08_LevelMin u16
+field R08_LevelMax u16
+field R08_Unk8 u32
+field R08_Zen u32
+field R08_ErrorDialog i16
+pad 2
+field R09_Unk0 u8
+field R09_Type u8
+field R09_CompleteQuest i16
+field R09_LevelMin u16
+field R09_LevelMax u16
+field R09_Unk8 u32
+field R09_Zen u32
+field R09_ErrorDialog i16
+pad 2
+field R10_Unk0 u8
+field R10_Type u8
+field R10_CompleteQuest i16
+field R10_LevelMin u16
+field R10_LevelMax u16
+field R10_Unk8 u32
+field R10_Zen u32
+field R10_ErrorDialog i16
+pad 2
+field R11_Unk0 u8
+field R11_Type u8
+field R11_CompleteQuest i16
+field R11_LevelMin u16
+field R11_LevelMax u16
+field R11_Unk8 u32
+field R11_Zen u32
+field R11_ErrorDialog i16
+pad 2
+field R12_Unk0 u8
+field R12_Type u8
+field R12_CompleteQuest i16
+field R12_LevelMin u16
+field R12_LevelMax u16
+field R12_Unk8 u32
+field R12_Zen u32
+field R12_ErrorDialog i16
+pad 2
+field R13_Unk0 u8
+field R13_Type u8
+field R13_CompleteQuest i16
+field R13_LevelMin u16
+field R13_LevelMax u16
+field R13_Unk8 u32
+field R13_Zen u32
+field R13_ErrorDialog i16
+pad 2
+field R14_Unk0 u8
+field R14_Type u8
+field R14_CompleteQuest i16
+field R14_LevelMin u16
+field R14_LevelMax u16
+field R14_Unk8 u32
+field R14_Zen u32
+field R14_ErrorDialog i16
+pad 2
+field R15_Unk0 u8
+field R15_Type u8
+field R15_CompleteQuest i16
+field R15_LevelMin u16
+field R15_LevelMax u16
+field R15_Unk8 u32
+field R15_Zen u32
+field R15_ErrorDialog i16
+pad 2
+variant q680 =136000 rec=680 xor=record label="0.97.14-darkav, 0.99.28 - 1.03.47 (200 x 680; 5 classes)"
+field ActCount i16
+field RequestCount i16
+field NpcType u8
+field Name str32
+pad 1
+field A00_Unk0 u8
+field A00_Type u8
+field A00_ItemType u8
+field A00_ItemIndex u8
+field A00_ItemLevel u8
+field A00_ItemNum u8
+field A00_RequestType u8
+field A00_Class u8*5
+field A00_DialogIndex i16*4
+field A01_Unk0 u8
+field A01_Type u8
+field A01_ItemType u8
+field A01_ItemIndex u8
+field A01_ItemLevel u8
+field A01_ItemNum u8
+field A01_RequestType u8
+field A01_Class u8*5
+field A01_DialogIndex i16*4
+field A02_Unk0 u8
+field A02_Type u8
+field A02_ItemType u8
+field A02_ItemIndex u8
+field A02_ItemLevel u8
+field A02_ItemNum u8
+field A02_RequestType u8
+field A02_Class u8*5
+field A02_DialogIndex i16*4
+field A03_Unk0 u8
+field A03_Type u8
+field A03_ItemType u8
+field A03_ItemIndex u8
+field A03_ItemLevel u8
+field A03_ItemNum u8
+field A03_RequestType u8
+field A03_Class u8*5
+field A03_DialogIndex i16*4
+field A04_Unk0 u8
+field A04_Type u8
+field A04_ItemType u8
+field A04_ItemIndex u8
+field A04_ItemLevel u8
+field A04_ItemNum u8
+field A04_RequestType u8
+field A04_Class u8*5
+field A04_DialogIndex i16*4
+field A05_Unk0 u8
+field A05_Type u8
+field A05_ItemType u8
+field A05_ItemIndex u8
+field A05_ItemLevel u8
+field A05_ItemNum u8
+field A05_RequestType u8
+field A05_Class u8*5
+field A05_DialogIndex i16*4
+field A06_Unk0 u8
+field A06_Type u8
+field A06_ItemType u8
+field A06_ItemIndex u8
+field A06_ItemLevel u8
+field A06_ItemNum u8
+field A06_RequestType u8
+field A06_Class u8*5
+field A06_DialogIndex i16*4
+field A07_Unk0 u8
+field A07_Type u8
+field A07_ItemType u8
+field A07_ItemIndex u8
+field A07_ItemLevel u8
+field A07_ItemNum u8
+field A07_RequestType u8
+field A07_Class u8*5
+field A07_DialogIndex i16*4
+field A08_Unk0 u8
+field A08_Type u8
+field A08_ItemType u8
+field A08_ItemIndex u8
+field A08_ItemLevel u8
+field A08_ItemNum u8
+field A08_RequestType u8
+field A08_Class u8*5
+field A08_DialogIndex i16*4
+field A09_Unk0 u8
+field A09_Type u8
+field A09_ItemType u8
+field A09_ItemIndex u8
+field A09_ItemLevel u8
+field A09_ItemNum u8
+field A09_RequestType u8
+field A09_Class u8*5
+field A09_DialogIndex i16*4
+field A10_Unk0 u8
+field A10_Type u8
+field A10_ItemType u8
+field A10_ItemIndex u8
+field A10_ItemLevel u8
+field A10_ItemNum u8
+field A10_RequestType u8
+field A10_Class u8*5
+field A10_DialogIndex i16*4
+field A11_Unk0 u8
+field A11_Type u8
+field A11_ItemType u8
+field A11_ItemIndex u8
+field A11_ItemLevel u8
+field A11_ItemNum u8
+field A11_RequestType u8
+field A11_Class u8*5
+field A11_DialogIndex i16*4
+field A12_Unk0 u8
+field A12_Type u8
+field A12_ItemType u8
+field A12_ItemIndex u8
+field A12_ItemLevel u8
+field A12_ItemNum u8
+field A12_RequestType u8
+field A12_Class u8*5
+field A12_DialogIndex i16*4
+field A13_Unk0 u8
+field A13_Type u8
+field A13_ItemType u8
+field A13_ItemIndex u8
+field A13_ItemLevel u8
+field A13_ItemNum u8
+field A13_RequestType u8
+field A13_Class u8*5
+field A13_DialogIndex i16*4
+field A14_Unk0 u8
+field A14_Type u8
+field A14_ItemType u8
+field A14_ItemIndex u8
+field A14_ItemLevel u8
+field A14_ItemNum u8
+field A14_RequestType u8
+field A14_Class u8*5
+field A14_DialogIndex i16*4
+field A15_Unk0 u8
+field A15_Type u8
+field A15_ItemType u8
+field A15_ItemIndex u8
+field A15_ItemLevel u8
+field A15_ItemNum u8
+field A15_RequestType u8
+field A15_Class u8*5
+field A15_DialogIndex i16*4
+pad 2
+field R00_Unk0 u8
+field R00_Type u8
+field R00_CompleteQuest i16
+field R00_LevelMin u16
+field R00_LevelMax u16
+field R00_Unk8 u32
+field R00_Zen u32
+field R00_ErrorDialog i16
+pad 2
+field R01_Unk0 u8
+field R01_Type u8
+field R01_CompleteQuest i16
+field R01_LevelMin u16
+field R01_LevelMax u16
+field R01_Unk8 u32
+field R01_Zen u32
+field R01_ErrorDialog i16
+pad 2
+field R02_Unk0 u8
+field R02_Type u8
+field R02_CompleteQuest i16
+field R02_LevelMin u16
+field R02_LevelMax u16
+field R02_Unk8 u32
+field R02_Zen u32
+field R02_ErrorDialog i16
+pad 2
+field R03_Unk0 u8
+field R03_Type u8
+field R03_CompleteQuest i16
+field R03_LevelMin u16
+field R03_LevelMax u16
+field R03_Unk8 u32
+field R03_Zen u32
+field R03_ErrorDialog i16
+pad 2
+field R04_Unk0 u8
+field R04_Type u8
+field R04_CompleteQuest i16
+field R04_LevelMin u16
+field R04_LevelMax u16
+field R04_Unk8 u32
+field R04_Zen u32
+field R04_ErrorDialog i16
+pad 2
+field R05_Unk0 u8
+field R05_Type u8
+field R05_CompleteQuest i16
+field R05_LevelMin u16
+field R05_LevelMax u16
+field R05_Unk8 u32
+field R05_Zen u32
+field R05_ErrorDialog i16
+pad 2
+field R06_Unk0 u8
+field R06_Type u8
+field R06_CompleteQuest i16
+field R06_LevelMin u16
+field R06_LevelMax u16
+field R06_Unk8 u32
+field R06_Zen u32
+field R06_ErrorDialog i16
+pad 2
+field R07_Unk0 u8
+field R07_Type u8
+field R07_CompleteQuest i16
+field R07_LevelMin u16
+field R07_LevelMax u16
+field R07_Unk8 u32
+field R07_Zen u32
+field R07_ErrorDialog i16
+pad 2
+field R08_Unk0 u8
+field R08_Type u8
+field R08_CompleteQuest i16
+field R08_LevelMin u16
+field R08_LevelMax u16
+field R08_Unk8 u32
+field R08_Zen u32
+field R08_ErrorDialog i16
+pad 2
+field R09_Unk0 u8
+field R09_Type u8
+field R09_CompleteQuest i16
+field R09_LevelMin u16
+field R09_LevelMax u16
+field R09_Unk8 u32
+field R09_Zen u32
+field R09_ErrorDialog i16
+pad 2
+field R10_Unk0 u8
+field R10_Type u8
+field R10_CompleteQuest i16
+field R10_LevelMin u16
+field R10_LevelMax u16
+field R10_Unk8 u32
+field R10_Zen u32
+field R10_ErrorDialog i16
+pad 2
+field R11_Unk0 u8
+field R11_Type u8
+field R11_CompleteQuest i16
+field R11_LevelMin u16
+field R11_LevelMax u16
+field R11_Unk8 u32
+field R11_Zen u32
+field R11_ErrorDialog i16
+pad 2
+field R12_Unk0 u8
+field R12_Type u8
+field R12_CompleteQuest i16
+field R12_LevelMin u16
+field R12_LevelMax u16
+field R12_Unk8 u32
+field R12_Zen u32
+field R12_ErrorDialog i16
+pad 2
+field R13_Unk0 u8
+field R13_Type u8
+field R13_CompleteQuest i16
+field R13_LevelMin u16
+field R13_LevelMax u16
+field R13_Unk8 u32
+field R13_Zen u32
+field R13_ErrorDialog i16
+pad 2
+field R14_Unk0 u8
+field R14_Type u8
+field R14_CompleteQuest i16
+field R14_LevelMin u16
+field R14_LevelMax u16
+field R14_Unk8 u32
+field R14_Zen u32
+field R14_ErrorDialog i16
+pad 2
+field R15_Unk0 u8
+field R15_Type u8
+field R15_CompleteQuest i16
+field R15_LevelMin u16
+field R15_LevelMax u16
+field R15_Unk8 u32
+field R15_Zen u32
+field R15_ErrorDialog i16
+pad 2
+variant q584 =116800 rec=584 xor=record label="0.97.04 (200 x 584; 4 classes, no ItemLevel/Unk8)"
+field ActCount i16
+field RequestCount i16
+field NpcType u8
+field Name str32
+pad 1
+field A00_Unk0 u8
+field A00_Type u8
+field A00_ItemType u8
+field A00_ItemIndex u8
+field A00_ItemNum u8
+field A00_RequestType u8
+field A00_Class u8*4
+field A00_DialogIndex i16*4
+field A01_Unk0 u8
+field A01_Type u8
+field A01_ItemType u8
+field A01_ItemIndex u8
+field A01_ItemNum u8
+field A01_RequestType u8
+field A01_Class u8*4
+field A01_DialogIndex i16*4
+field A02_Unk0 u8
+field A02_Type u8
+field A02_ItemType u8
+field A02_ItemIndex u8
+field A02_ItemNum u8
+field A02_RequestType u8
+field A02_Class u8*4
+field A02_DialogIndex i16*4
+field A03_Unk0 u8
+field A03_Type u8
+field A03_ItemType u8
+field A03_ItemIndex u8
+field A03_ItemNum u8
+field A03_RequestType u8
+field A03_Class u8*4
+field A03_DialogIndex i16*4
+field A04_Unk0 u8
+field A04_Type u8
+field A04_ItemType u8
+field A04_ItemIndex u8
+field A04_ItemNum u8
+field A04_RequestType u8
+field A04_Class u8*4
+field A04_DialogIndex i16*4
+field A05_Unk0 u8
+field A05_Type u8
+field A05_ItemType u8
+field A05_ItemIndex u8
+field A05_ItemNum u8
+field A05_RequestType u8
+field A05_Class u8*4
+field A05_DialogIndex i16*4
+field A06_Unk0 u8
+field A06_Type u8
+field A06_ItemType u8
+field A06_ItemIndex u8
+field A06_ItemNum u8
+field A06_RequestType u8
+field A06_Class u8*4
+field A06_DialogIndex i16*4
+field A07_Unk0 u8
+field A07_Type u8
+field A07_ItemType u8
+field A07_ItemIndex u8
+field A07_ItemNum u8
+field A07_RequestType u8
+field A07_Class u8*4
+field A07_DialogIndex i16*4
+field A08_Unk0 u8
+field A08_Type u8
+field A08_ItemType u8
+field A08_ItemIndex u8
+field A08_ItemNum u8
+field A08_RequestType u8
+field A08_Class u8*4
+field A08_DialogIndex i16*4
+field A09_Unk0 u8
+field A09_Type u8
+field A09_ItemType u8
+field A09_ItemIndex u8
+field A09_ItemNum u8
+field A09_RequestType u8
+field A09_Class u8*4
+field A09_DialogIndex i16*4
+field A10_Unk0 u8
+field A10_Type u8
+field A10_ItemType u8
+field A10_ItemIndex u8
+field A10_ItemNum u8
+field A10_RequestType u8
+field A10_Class u8*4
+field A10_DialogIndex i16*4
+field A11_Unk0 u8
+field A11_Type u8
+field A11_ItemType u8
+field A11_ItemIndex u8
+field A11_ItemNum u8
+field A11_RequestType u8
+field A11_Class u8*4
+field A11_DialogIndex i16*4
+field A12_Unk0 u8
+field A12_Type u8
+field A12_ItemType u8
+field A12_ItemIndex u8
+field A12_ItemNum u8
+field A12_RequestType u8
+field A12_Class u8*4
+field A12_DialogIndex i16*4
+field A13_Unk0 u8
+field A13_Type u8
+field A13_ItemType u8
+field A13_ItemIndex u8
+field A13_ItemNum u8
+field A13_RequestType u8
+field A13_Class u8*4
+field A13_DialogIndex i16*4
+field A14_Unk0 u8
+field A14_Type u8
+field A14_ItemType u8
+field A14_ItemIndex u8
+field A14_ItemNum u8
+field A14_RequestType u8
+field A14_Class u8*4
+field A14_DialogIndex i16*4
+field A15_Unk0 u8
+field A15_Type u8
+field A15_ItemType u8
+field A15_ItemIndex u8
+field A15_ItemNum u8
+field A15_RequestType u8
+field A15_Class u8*4
+field A15_DialogIndex i16*4
+pad 2
+field R00_Unk0 u8
+field R00_Type u8
+field R00_CompleteQuest i16
+field R00_LevelMin u16
+field R00_LevelMax u16
+field R00_Zen u32
+field R00_ErrorDialog i16
+pad 2
+field R01_Unk0 u8
+field R01_Type u8
+field R01_CompleteQuest i16
+field R01_LevelMin u16
+field R01_LevelMax u16
+field R01_Zen u32
+field R01_ErrorDialog i16
+pad 2
+field R02_Unk0 u8
+field R02_Type u8
+field R02_CompleteQuest i16
+field R02_LevelMin u16
+field R02_LevelMax u16
+field R02_Zen u32
+field R02_ErrorDialog i16
+pad 2
+field R03_Unk0 u8
+field R03_Type u8
+field R03_CompleteQuest i16
+field R03_LevelMin u16
+field R03_LevelMax u16
+field R03_Zen u32
+field R03_ErrorDialog i16
+pad 2
+field R04_Unk0 u8
+field R04_Type u8
+field R04_CompleteQuest i16
+field R04_LevelMin u16
+field R04_LevelMax u16
+field R04_Zen u32
+field R04_ErrorDialog i16
+pad 2
+field R05_Unk0 u8
+field R05_Type u8
+field R05_CompleteQuest i16
+field R05_LevelMin u16
+field R05_LevelMax u16
+field R05_Zen u32
+field R05_ErrorDialog i16
+pad 2
+field R06_Unk0 u8
+field R06_Type u8
+field R06_CompleteQuest i16
+field R06_LevelMin u16
+field R06_LevelMax u16
+field R06_Zen u32
+field R06_ErrorDialog i16
+pad 2
+field R07_Unk0 u8
+field R07_Type u8
+field R07_CompleteQuest i16
+field R07_LevelMin u16
+field R07_LevelMax u16
+field R07_Zen u32
+field R07_ErrorDialog i16
+pad 2
+field R08_Unk0 u8
+field R08_Type u8
+field R08_CompleteQuest i16
+field R08_LevelMin u16
+field R08_LevelMax u16
+field R08_Zen u32
+field R08_ErrorDialog i16
+pad 2
+field R09_Unk0 u8
+field R09_Type u8
+field R09_CompleteQuest i16
+field R09_LevelMin u16
+field R09_LevelMax u16
+field R09_Zen u32
+field R09_ErrorDialog i16
+pad 2
+field R10_Unk0 u8
+field R10_Type u8
+field R10_CompleteQuest i16
+field R10_LevelMin u16
+field R10_LevelMax u16
+field R10_Zen u32
+field R10_ErrorDialog i16
+pad 2
+field R11_Unk0 u8
+field R11_Type u8
+field R11_CompleteQuest i16
+field R11_LevelMin u16
+field R11_LevelMax u16
+field R11_Zen u32
+field R11_ErrorDialog i16
+pad 2
+field R12_Unk0 u8
+field R12_Type u8
+field R12_CompleteQuest i16
+field R12_LevelMin u16
+field R12_LevelMax u16
+field R12_Zen u32
+field R12_ErrorDialog i16
+pad 2
+field R13_Unk0 u8
+field R13_Type u8
+field R13_CompleteQuest i16
+field R13_LevelMin u16
+field R13_LevelMax u16
+field R13_Zen u32
+field R13_ErrorDialog i16
+pad 2
+field R14_Unk0 u8
+field R14_Type u8
+field R14_CompleteQuest i16
+field R14_LevelMin u16
+field R14_LevelMax u16
+field R14_Zen u32
+field R14_ErrorDialog i16
+pad 2
+field R15_Unk0 u8
+field R15_Type u8
+field R15_CompleteQuest i16
+field R15_LevelMin u16
+field R15_LevelMax u16
+field R15_Zen u32
+field R15_ErrorDialog i16
+pad 2
+
+table Slide slide.bmd
+variant v1 =41008 rec=41008 xor=record label="0.97.14-darkav, 0.99.28 - 1.04.24 (one record, 5 level bands)"
+field IntervalSec u32
+field Unk4 f32
+field B0_MaxLevel u32
+field B0_Count u32
+field B0_Text str256*32
+field B1_MaxLevel u32
+field B1_Count u32
+field B1_Text str256*32
+field B2_MaxLevel u32
+field B2_Count u32
+field B2_Text str256*32
+field B3_MaxLevel u32
+field B3_Count u32
+field B3_Text str256*32
+field B4_MaxLevel u32
+field B4_Count u32
+field B4_Text str256*32
+
+table Credit credit.bmd
+variant v1 =13200 rec=33 xor=record label="1.02.44 - 1.04.24 (400 x 33)"
+field LineType u8
+field Text str32
+
+table ServerInfo serverinfo.bmd
+# kayito custom-main config, NOT a Webzen file. Cipher: plain[i] = enc[i] ^ K20[i % 20] ^ (i & 0xFF).
+# Only the header is named; custom maps (~@352) and custom jewels (@144048+) stay raw.
+variant kayito =169120 rec=169120 xor=kayito label="1.04.10 kayito custom main config"
+field Unk0 raw33
+field Customer str32
+field IpAddress str32
+field Unk97 u8
+field Port u16
+field ClientVersion str8
+field ClientSerial str17
+field WindowTitle str32
+field ScreenshotPath str50
+field ExeName str32
+field Rest raw168881
+
+table ShopCategoryItems shopcategoryitems.bmd
+# u32 count + count x 20 (xor per record) + u32 CRC (wkey E2F1) over the records only (count excluded).
+# ItemGroup/ItemIndex named from the values (cash-shop items in groups 12-14); row 49 looks like filler.
+variant v1 * rec=20 header=count32 crc=E2F1 crcscope=body xor=record label="1.03.16 partCharge1 (50 x 20)"
+field Unk0 u16
+field ItemGroup u16
+field ItemIndex u16
+field Unk6 raw14
+
+table ShopUI shopui.bmd
+# u32 count + count x 72 (xor per record) + u32 CRC (wkey E2F1) over the records only (count excluded).
+variant v1 * rec=72 header=count32 crc=E2F1 crcscope=body xor=record label="1.03.16 partCharge1 (19 x 72)"
+field Unk0 u32
+field Unk4 u32
+field Unk8 u32
+field Name str60
