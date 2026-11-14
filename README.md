@@ -36,6 +36,36 @@ come back from the txt. All real fields match, and txt → bmd → txt is identi
 The Season 16 output of every tool is unchanged. Exception: `Mix_bmd` now writes zeros instead of random stack
 memory into those unused areas.
 
+#### GMO-only files (`_bin_/Data/Gmo_bmd`)
+
+These tools convert files that exist only in GMO. Like the other tools, you drag & drop a `.bmd` to get the `.txt`,
+and drag & drop the `.txt` to get `<name>.out.bmd`. The layouts and converters are in `_src_/Core/GmoBmd.h`.
+
+| Tool | File | Contents |
+|---|---|---|
+| `Gate_bmd` | Gate.bmd (512 × 14 bytes) | warp gates; the older 12-byte gate plus `MaxLevel` |
+| `JewelOfHarmonySmelt_bmd` | JewelOfHarmonySmelt(_eng/_por/_spn).bmd | items that can be smelted (8192 slots) |
+| `ArcaBattleBootyMix_bmd` | ArcaBattleBootyMix.bmd | 10 rows of count ranges and rates |
+| `FcsData_bmd` | FcsData.bmd | login launcher config (login URLs, server code, language) |
+| `WebAPIMessage_bmd` | WebAPIMessage.bmd | login / web API error messages (Webzen ships its own source as `webapimessage.bmd.txt`) |
+| `AttributeVariation_bmd` | attributevariation.bmd | 6 elemental variants per monster (model folder + texture) |
+| `ItemLevelTooltip_bmd` | ItemLevelTooltip.bmd | item names and 11 tooltip lines (128 slots) |
+| `Minimap_bmd` | Minimap.bmd | NPCs and entrances per map (position, name) |
+
+- **Fixed-slot files** (Gate, JewelOfHarmonySmelt, ItemLevelTooltip): the first column is the slot number. Empty
+  slots are not written and are packed back as zeros, so deleting a row does not shift the other gates or items.
+- **JewelOfHarmonySmelt**: the `//NameFill=FF` line records how the names are padded (FF in the Korean / English
+  files, 00 in Portuguese / Spanish). Keep that line.
+- **Minimap**: the first column is the map number. Rows of the same map are packed together, in the order the maps
+  first appear.
+- Text is in the client's code page (cp949 for the Korean base files).
+- Fields whose meaning is not known are named `Unk<offset>`. ArcaBattleBootyMix's `MinCount` / `MaxCount` / `Rate` and
+  ItemLevelTooltip's `LineNText` / `LineNValue` are guesses from the values.
+
+Every file packs back byte-identical, except Minimap. In Minimap, the first NPC name (조련사) has junk bytes after its
+terminator. The game ignores them, and they cannot come back from the txt; txt → bmd → txt is identical.
+`ItemTRSData.bmd` is an empty file in the client, so there is nothing to convert.
+
 ### LASTEST UPDATE: JULY 2022
   
 Add Bmd2Fbx tool  
