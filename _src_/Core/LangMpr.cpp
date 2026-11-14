@@ -107,7 +107,6 @@ BOOL LangMpr::Encrypt()
 BOOL LangMpr::UnZip(const char *szDestDir)
 {
 	assert(_buf.size() && szDestDir);
-	const wstring wsPassword = _LANG_ZIP_PASSWORD_;
 	const fs::path pDir = Utls::BackupPath(Utls::RemoveSlashEnd(szDestDir));
 
 	Utls::CreateParentDir(pDir);
@@ -117,8 +116,33 @@ BOOL LangMpr::UnZip(const char *szDestDir)
 	try {
 		Bit7zLibrary lib{ L"7z.dll" };
 		BitMemExtractor extractor{ lib, BitFormat::Zip };
-		extractor.setPassword(wsPassword);
+
+		// find the client version: test the archive with each known password
+		bool found = false;
+		for (size_t k = 0; k < std::size(LANG_MPR_KEYS) && !found; ++k)
+		{
+			try {
+				extractor.setPassword(LANG_MPR_KEYS[k].Password);
+				extractor.test(_buf);
+				_key = k;
+				found = true;
+			}
+			catch (const BitException&) {}
+		}
+		if (!found)
+		{
+			std::cout << "Error: no known Lang.mpr password fits this file (unknown client version).\n";
+			std::cout << "\tAdd its password to LANG_MPR_KEYS in LangMpr.h \n";
+			return false;
+		}
+		std::cout << "Lang.mpr version: " << LANG_MPR_KEYS[_key].Name << '\n';
+
+		extractor.setPassword(LANG_MPR_KEYS[_key].Password);
 		extractor.extract(_buf, pDir);
+
+		// remember the version for Pack
+		std::ofstream key(pDir.string() + ".mprkey");
+		key << LANG_MPR_KEYS[_key].Name << '\n';
 	}
 	catch (const BitException& ex) {
 		std::cout << "Error: " << ex.what() << '\n';
@@ -147,7 +171,19 @@ BOOL LangMpr::Zip(const char *szSrcDir)
 {
 	assert(szSrcDir);
 	fs::path pDir = Utls::RemoveSlashEnd(szSrcDir);
-	const wstring wsPassword = _LANG_ZIP_PASSWORD_;
+
+	// version written by Unpack next to the folder ("<folder>.mprkey"); default = first entry (Season 16)
+	_key = 0;
+	std::ifstream key(pDir.string() + ".mprkey");
+	std::string name;
+	if (key >> name)
+	{
+		for (size_t k = 0; k < std::size(LANG_MPR_KEYS); ++k)
+			if (name == LANG_MPR_KEYS[k].Name)
+				_key = k;
+	}
+	std::cout << "Lang.mpr version: " << LANG_MPR_KEYS[_key].Name << '\n';
+	const wstring wsPassword = LANG_MPR_KEYS[_key].Password;
 
 	try {
 		Bit7zLibrary lib{ L"7z.dll" };
