@@ -5,5 +5,6 @@
 
 int main(int argc, char** argv)
 {
-	return Convert<ItemBmd>(argc, argv);
+	// Season 16 or GMO item.bmd / item.txt - detected from the file
+	return ConvertAuto<ItemBmd, ItemBmdGMO>(argc, argv);
 }

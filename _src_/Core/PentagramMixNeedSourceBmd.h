@@ -4,12 +4,13 @@
 
 #define _PENTAGRAM_MIX_SOURCE_NEED_BMD_WKEY_ _COMMON_TXTCONVERTOR_WKEY_
 
-typedef TxtConvertor<PENTAGRAM_MIX_SOURCE> PentagramMixSourceNeedBmdConvert;
-class PentagramMixNeedSourceBmd : public PentagramMixSourceNeedBmdConvert
+// Season 16 = PENTAGRAM_MIX_SOURCE (144 bytes), GMO = PENTAGRAM_MIX_SOURCE_GMO (188 bytes).
+template<typename T>
+class PentagramMixNeedSourceBmdT : public TxtConvertor<T>
 {
 public:
-	PentagramMixNeedSourceBmd() : PentagramMixSourceNeedBmdConvert(_PENTAGRAM_MIX_SOURCE_NEED_BMD_WKEY_) {};
-	virtual ~PentagramMixNeedSourceBmd() {};
+	PentagramMixNeedSourceBmdT() : TxtConvertor<T>(_PENTAGRAM_MIX_SOURCE_NEED_BMD_WKEY_) {};
+	virtual ~PentagramMixNeedSourceBmdT() {};
 
 private:
 	void MakeLabelEx(std::ofstream& os)
@@ -22,7 +23,10 @@ private:
 		os << "// Cat6: Wing Add Option" << std::endl;
 		os << "// Cat7: Wing Option Level Upgrade" << std::endl;
 	};
-	int GetKey(PENTAGRAM_MIX_SOURCE* ptr) { return (ptr->Category << 8) | ptr->Index; };
+	int GetKey(T* ptr) { return (ptr->Category << 8) | ptr->Index; };
 };
+
+typedef PentagramMixNeedSourceBmdT<PENTAGRAM_MIX_SOURCE> PentagramMixNeedSourceBmd;
+typedef PentagramMixNeedSourceBmdT<PENTAGRAM_MIX_SOURCE_GMO> PentagramMixNeedSourceBmdGMO;
 
 #endif

@@ -317,6 +317,78 @@ STRUCT(ITEM_SET_OPTION) LAZY
 
 );
 
+//struct ITEM_SET_OPTION_GMO (GMO: 3 more classes, 300 sets)
+STRUCT(ITEM_SET_OPTION_GMO) LAZY
+(
+	char Name1[64];
+	char Name2[64];
+	int Opt_1stIndex_1;
+	int Opt_2ndIndex_1;
+	int Opt_1stIndex_2;
+	int Opt_2ndIndex_2;
+	int Opt_1stIndex_3;
+	int Opt_2ndIndex_3;
+	int Opt_1stIndex_4;
+	int Opt_2ndIndex_4;
+	int Opt_1stIndex_5;
+	int Opt_2ndIndex_5;
+	int Opt_1stIndex_6;
+	int Opt_2ndIndex_6;
+	int Opt_1stValue_1;
+	int Opt_2ndValue_1;
+	int Opt_1stValue_2;
+	int Opt_2ndValue_2;
+	int Opt_1stValue_3;
+	int Opt_2ndValue_3;
+	int Opt_1stValue_4;
+	int Opt_2ndValue_4;
+	int Opt_1stValue_5;
+	int Opt_2ndValue_5;
+	int Opt_1stValue_6;
+	int Opt_2ndValue_6;
+	int Opt_1stExIndex;
+	int Opt_2ndExIndex;
+	int Opt_1stExValue;
+	int Opt_2ndExValue;
+
+	int Flag;
+	int Full_Index_1;
+	int Full_Index_2;
+	int Full_Index_3;
+	int Full_Index_4;
+	int Full_Index_5;
+	int Full_Index_6;
+	int Full_Index_7;
+	int Full_Index_8;
+	int Full_Index_9;
+
+	int Full_Value_1;
+	int Full_Value_2;
+	int Full_Value_3;
+	int Full_Value_4;
+	int Full_Value_5;
+	int Full_Value_6;
+	int Full_Value_7;
+	int Full_Value_8;
+	int Full_Value_9;
+
+	int DW;
+	int DK;
+	int FE;
+	int MG;
+	int DL;
+	int SU;
+	int RF;
+	int GL;
+	int RW;
+	int SL;
+	int GC;
+	int Class12;
+	int Class13;
+	int Class14;
+
+);
+
 //struct ITEM_SET_TYPE
 STRUCT(ITEM_SET_TYPE) LAZY
 (
@@ -324,6 +396,17 @@ STRUCT(ITEM_SET_TYPE) LAZY
 	BYTE Tier2;
 	BYTE Tier3;
 	BYTE Tier4;
+	BYTE Unk1;
+	BYTE Unk2;
+);
+
+//struct ITEM_SET_TYPE_GMO (GMO: set indexes went past 255, tiers are WORDs)
+STRUCT(ITEM_SET_TYPE_GMO) LAZY
+(
+	WORD Tier1;
+	WORD Tier2;
+	WORD Tier3;
+	WORD Tier4;
 	BYTE Unk1;
 	BYTE Unk2;
 );
@@ -434,7 +517,10 @@ STRUCT(SOCKET_ITEM_INFO) LAZY
 	BYTE EarthNeed;
 );
 
-struct QUEST_INFO_ITEM
+// Quest.bmd item: Season 16 = 11 classes (DW DK FE MG DL SU RF GL RW SL GC, 28 bytes),
+// GMO = 14 classes (30 bytes).
+template<int NCLASS>
+struct QUEST_INFO_ITEM_T
 {
 	BYTE Flag;
 	BYTE QuestType;
@@ -443,18 +529,7 @@ struct QUEST_INFO_ITEM
 	BYTE Level;
 	BYTE Amount;
 	BYTE LinkConditionIndex;
-	BYTE DW;
-	BYTE DK;
-	BYTE FE;
-	BYTE MG;
-	BYTE DL;
-	BYTE SU;
-	BYTE RF;
-	BYTE GL;
-	BYTE RW;
-	BYTE SL;
-	BYTE GC;
-	//BYTE GAP;
+	BYTE Class[NCLASS];
 	WORD Msg_1;
 	WORD Msg_2;
 	WORD Msg_3;
@@ -474,19 +549,27 @@ struct QUEST_INFO_TYPE
 	WORD GAP;
 };
 
-struct QUEST_INFO
+// Season 16 = QUEST_INFO_T<32, 11> (808 bytes), GMO = QUEST_INFO_T<64, 14> (872 bytes)
+template<int NAME_LEN, int NCLASS>
+struct QUEST_INFO_T
 {
+	static const int CLASSES = NCLASS;
+	static const bool EXTRA_CLASSES = NCLASS > 11;
+
 	WORD ItemCount;
 	WORD TypeCount;
 	WORD NPC;
-	char QuestName[32];
-	QUEST_INFO_ITEM Items[16];
+	char QuestName[NAME_LEN];
+	QUEST_INFO_ITEM_T<NCLASS> Items[16];
 	QUEST_INFO_TYPE Types[16];
 
 	static std::string GetLabel() { return std::string(); };
 	static std::string GetFormat() { return std::string(); };
 	static std::vector<OffsetInfo> GetOffset() { return std::vector<OffsetInfo>(); };
 };
+
+typedef QUEST_INFO_T<32, 11> QUEST_INFO;
+typedef QUEST_INFO_T<64, 14> QUEST_INFO_GMO;
 
 //struct STAT_OPTION_TEXT
 STRUCT(STAT_OPTION_TEXT) LAZY
@@ -723,6 +806,25 @@ STRUCT(PENTAGRAM_MIX_SOURCE) LAZY
 	int Unk_Block[4];
 );
 
+//struct PENTAGRAM_MIX_SOURCE_GMO
+STRUCT(PENTAGRAM_MIX_SOURCE_GMO) LAZY
+(
+	int Category;
+	int Index;
+	int SuccessRate_Cat0;
+	int ItemID[5];
+	int ItemCat[5];
+	int ItemIndex[5];
+	int ItemCount[5];
+	int MoneyNeed;
+	int ItemLevelNeed;
+	int ErrtelRankNeed;
+	int ErrtelCount;
+	int SuccessRate_Cat1[5];
+	int Unk_Block[4];
+	int Unk_GMO[11];	// GMO: 44 more bytes (looks like leftover memory, kept as-is)
+);
+
 //struct INFO_TOOLTIP_TEXT
 STRUCT(INFO_TOOLTIP_TEXT) LAZY
 (
@@ -838,5 +940,94 @@ STRUCT(ITEM_ATTRIBUTE) LAZY
 	//BYTE GAP_673;
 	WORD Unk_End[3];
 );
+
+//struct ITEM_ATTRIBUTE_GMO (692 bytes) - Global MU Online 1.12.9 (2023), Data\Local\Eng\item_eng.bmd
+//Same as ITEM_ATTRIBUTE (680) plus 3 class flags after GC (the classes added after Season 16) and 9 bytes
+//at the end (unknown meaning; kept as raw values so files round-trip). Found by comparing 1895 items that
+//exist in both versions: every S16 field is unchanged, only shifted by +3 after the class flags.
+STRUCT(ITEM_ATTRIBUTE_GMO) LAZY
+(
+	DWORD ItemIndex;
+	WORD ItemSubGroup;
+	WORD ItemSubIndex;
+	char szModelFolder[260];
+	char szModelName[260];
+	char szItemName[64];
+	BYTE KindA;
+	BYTE KindB;
+	BYTE Type;
+	BYTE TwoHands;
+	WORD DropLevel;
+	BYTE Slot;
+	//BYTE GAP_564;
+	WORD SkillIndex;
+	BYTE Width;
+	BYTE Height;
+	WORD DamageMin;
+	WORD DamageMax;
+	BYTE DefenseRate;
+	//BYTE GAP_575;
+	WORD Defense;
+	WORD MagicResistance;
+	BYTE AttackSpeed;
+	BYTE WalkSpeed;
+	BYTE Durability;
+	BYTE MagicDur;
+	DWORD MagicPower;
+	WORD ReqStr;
+	WORD ReqDex;
+	WORD ReqEne;
+	WORD ReqVit;
+	WORD ReqCmd;
+	WORD ReqLvl;
+	BYTE ItemValue;
+	//BYTE GAP3_601;
+	DWORD Money;
+	BYTE SetAttr;
+	BYTE DW;
+	BYTE DK;
+	BYTE FE;
+	BYTE MG;
+	BYTE DL;
+	BYTE SU;
+	BYTE RF;
+	BYTE GL;
+	BYTE RW;
+	BYTE SL;
+	BYTE GC;
+	BYTE Class12;
+	BYTE Class13;
+	BYTE Class14;
+	BYTE Resist[7];
+	BYTE Dump;
+	BYTE Transaction;
+	BYTE PersonalStore;
+	BYTE Warehouse;
+	BYTE SellNpc;
+	BYTE Expensive;
+	BYTE Repair;
+	BYTE Overlap;
+	BYTE PcFlag;
+	BYTE MuunFlag;
+	WORD Unk_End[3];
+	BYTE Unk_682;
+	BYTE Unk_683;
+	BYTE Unk_684;
+	BYTE Unk_685;
+	WORD Unk_686;
+	WORD Unk_688;
+	WORD Unk_690;
+);
+
+static_assert(sizeof(ITEM_ATTRIBUTE) == 680, "Season 16 item.bmd record");
+static_assert(sizeof(ITEM_ATTRIBUTE_GMO) == 692, "GMO item.bmd record");
+static_assert(sizeof(ITEM_SET_TYPE) == 6, "Season 16 itemsettype.bmd record");
+static_assert(sizeof(ITEM_SET_TYPE_GMO) == 10, "GMO itemsettype.bmd record");
+static_assert(sizeof(ITEM_SET_OPTION) == 360, "Season 16 itemsetoption.bmd record");
+static_assert(sizeof(ITEM_SET_OPTION_GMO) == 372, "GMO itemsetoption.bmd record");
+static_assert(sizeof(PENTAGRAM_MIX_SOURCE) == 144, "Season 16 PentagramMixNeedSource.bmd record");
+static_assert(sizeof(PENTAGRAM_MIX_SOURCE_GMO) == 188, "GMO PentagramMixNeedSource.bmd record");
+static_assert(sizeof(QUEST_INFO) == 808, "Season 16 Quest.bmd record");
+static_assert(sizeof(QUEST_INFO_GMO) == 872, "GMO Quest.bmd record");
 
 #endif

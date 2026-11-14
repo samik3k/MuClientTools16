@@ -5,5 +5,6 @@
 
 int main(int argc, char** argv)
 {
-	return Convert<ItemSetOptionBmd>(argc, argv);
+	// Season 16 or GMO itemsetoption.bmd / .txt - detected from the file
+	return ConvertAutoFixed<ItemSetOptionBmd, ItemSetOptionBmdGMO>(argc, argv);
 }

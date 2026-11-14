@@ -5,5 +5,6 @@
 
 int main(int argc, char** argv)
 {
-	return Convert<QuestBmd>(argc, argv);
+	// Season 16 or GMO Quest.bmd / .txt - detected from the file
+	return ConvertAutoFixed<QuestBmd, QuestBmdGMO>(argc, argv);
 }

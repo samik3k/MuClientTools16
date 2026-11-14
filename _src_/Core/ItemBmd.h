@@ -4,27 +4,19 @@
 
 #define _ITEM_BMD_WKEY_ _COMMON_TXTCONVERTOR_WKEY_
 
-typedef TxtConvertor<ITEM_ATTRIBUTE> ItemBmdConvert;
-class ItemBmd : public ItemBmdConvert
+// Item.bmd for Season 16 (ITEM_ATTRIBUTE, 680 bytes) and GMO (ITEM_ATTRIBUTE_GMO, 692 bytes).
+// Item_bmd.exe picks the right one by itself (ConvertAuto).
+template<typename T>
+class ItemBmdT : public TxtConvertor<T>
 {
 public:
-	ItemBmd() : ItemBmdConvert(_ITEM_BMD_WKEY_) {};
-	virtual ~ItemBmd() {};
+	ItemBmdT() : TxtConvertor<T>(_ITEM_BMD_WKEY_) {};
+	virtual ~ItemBmdT() {};
 
-	/*
-	BOOL Unpack(const char *szSrcBmd, const char *szDestTxt)
-	{	
-		sizeof(ITEM_ATTRIBUTE);
-	return FileOpen(szSrcBmd)
-		&& Decrypt()
-		&& FileWrite(fs::path(szSrcBmd).replace_extension(".debug").string().c_str());
-	};
-	*/
 private:
 
-	int GetKey(ITEM_ATTRIBUTE* ptr)
+	int GetKey(T* ptr)
 	{
-		sizeof(ITEM_ATTRIBUTE);
 		int check_index = (ptr->ItemSubGroup * 512) + ptr->ItemSubIndex;
 		if (ptr->ItemIndex != check_index)
 		{
@@ -34,5 +26,8 @@ private:
 		return ptr->ItemIndex;
 	};
 };
+
+typedef ItemBmdT<ITEM_ATTRIBUTE> ItemBmd;
+typedef ItemBmdT<ITEM_ATTRIBUTE_GMO> ItemBmdGMO;
 
 #endif

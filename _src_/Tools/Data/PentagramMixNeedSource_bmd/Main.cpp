@@ -5,5 +5,6 @@
 
 int main(int argc, char** argv)
 {
-	return Convert<PentagramMixNeedSourceBmd>(argc, argv);
+	// Season 16 or GMO - detected from the file
+	return ConvertAuto<PentagramMixNeedSourceBmd, PentagramMixNeedSourceBmdGMO>(argc, argv);
 }

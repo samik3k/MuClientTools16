@@ -15,6 +15,27 @@ every old layout (unpack to text and pack back byte-identical), OZ* images inclu
 v0x0C models, old and encrypted terrain files and the Enc1/Dec2 key files. Layouts are kept in an editable schema.
 See [`_bin_/Legacy/README.md`](_bin_/Legacy/README.md).
 
+### Global MU (GMO, current Webzen client)
+
+These tools read both Season 16 and GMO files. They recognise the version from the file itself and print
+`Format: S16` or `Format: GMO`. Nothing needs to be selected.
+
+| Tool | What changed in GMO | How the version is recognised |
+|---|---|---|
+| `Lang_mpr` | new zip password (`imeX#BqL]iiC]v]U$4-}+O86i`) | each known password is tested. The one found is saved next to the unpacked folder as `<dir>.mprkey` and used again when packing |
+| `Item_bmd` | record 680 → 692 bytes: 3 more classes (`Class12..14`) and 12 unknown bytes at the end | .bmd: record size; .txt: header line |
+| `ItemSetType_bmd` | tiers are WORD instead of BYTE (set indexes > 255), record 6 → 10 bytes | .bmd: file size; .txt: header ends with `//GMO` |
+| `ItemSetOption_bmd` | 300 sets instead of 255; 3 more classes, record 360 → 372 bytes | .bmd: file size; .txt: header line |
+| `PentagramMixNeedSource_bmd` | 44 more bytes per record (`Unk_GMO`, looks like leftover memory, kept as-is) | .bmd: record size; .txt: header line |
+| `Quest_bmd` | QuestName 32 → 64 chars; quest items have 3 more classes | .bmd: file size; .txt: first line `//GMO Quest.bmd` |
+| `Mix_bmd` | 14 recipe groups instead of 13 (group 0 has more than 1000 recipes) | .bmd: group counts add up to the file size; .txt: first line `//GMO mix.bmd (14 groups)` |
+
+Each tool was tested on the GMO files: unpack, pack, and compare with the original. The result is byte-identical,
+except for `Mix_bmd`. There, Webzen's file has junk bytes in padding and unused rule/item slots, and those cannot
+come back from the txt. All real fields match, and txt → bmd → txt is identical.
+The Season 16 output of every tool is unchanged. Exception: `Mix_bmd` now writes zeros instead of random stack
+memory into those unused areas.
+
 ### LASTEST UPDATE: JULY 2022
   
 Add Bmd2Fbx tool  

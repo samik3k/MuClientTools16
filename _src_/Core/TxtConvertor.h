@@ -7,6 +7,8 @@ template<typename T>
 class TxtConvertor : public BaseIO
 {
 public:
+	typedef T Record;	// used by ConvertAuto to tell versions apart
+
 	TxtConvertor(WORD w = _COMMON_TXTCONVERTOR_WKEY_) : _wkey(w), hasCounter(true), hasCRC(true) {};
 	virtual ~TxtConvertor() {};
 
